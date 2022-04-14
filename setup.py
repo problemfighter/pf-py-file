@@ -9,7 +9,7 @@ env = os.environ.get('source')
 
 
 def get_dependencies():
-    dependency = []
+    dependency = ["Pillow"]
 
     if env and env == "dev":
         return dependency
