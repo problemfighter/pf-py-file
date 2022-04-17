@@ -11,6 +11,8 @@ class ImageUtil:
             return None
         file_original_name = PFPFFileUtil.get_file_name(image_path)
         file_extension = PFPFFileUtil.get_file_name(file_original_name)
+        if file_extension:
+            file_extension = file_extension.lower()
         if name:
             name = name + file_extension
         else:
