@@ -5,6 +5,13 @@ import shutil
 class PFPFFileUtil:
 
     @staticmethod
+    def copy(source, destination):
+        if os.path.isdir(source):
+            return shutil.copytree(source, destination)
+        else:
+            return shutil.copy(source, destination)
+
+    @staticmethod
     def create_directories(path):
         if not os.path.exists(path):
             os.makedirs(path)
