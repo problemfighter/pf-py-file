@@ -9,3 +9,7 @@ class PFPFFileReader:
             raise PFException("Invalid File")
         with open(file_path, 'r') as file:
             return file.read()
+
+    @staticmethod
+    def ins() -> "PFPFFileReader":
+        return PFPFFileReader()
