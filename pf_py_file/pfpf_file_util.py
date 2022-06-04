@@ -5,9 +5,9 @@ import shutil
 class PFPFFileUtil:
 
     @staticmethod
-    def copy(source, destination):
+    def copy(source, destination, ignore=None):
         if os.path.isdir(source):
-            return shutil.copytree(source, destination)
+            return shutil.copytree(source, destination, ignore)
         else:
             return shutil.copy(source, destination)
 
@@ -32,7 +32,7 @@ class PFPFFileUtil:
     @staticmethod
     def delete(path):
         if PFPFFileUtil.is_exist(path):
-            shutil.rmtree(path)
+            shutil.rmtree(path, ignore_errors=True)
 
     @staticmethod
     def rename(source, destination):
