@@ -23,6 +23,19 @@ class TextFileMan:
             return False
 
     @staticmethod
+    def write_text_file_specific_index(file_path, index, text_content):
+        try:
+            stream = open(file_path, 'r+', encoding="utf-8")
+            lines = stream.readlines()
+            lines.insert(index, text_content)
+            stream.seek(0)
+            stream.writelines(lines)
+            stream.close()
+        except Exception as e:
+            return False
+
+
+    @staticmethod
     def find_replace_text_content(file_path, find_replace_list_of_dict: list):
         text_content = TextFileMan.get_text_from_file(file_path)
         for find_replace_dict in find_replace_list_of_dict:
