@@ -19,7 +19,7 @@ def get_dependencies():
 
 setup(
     name='PF-PY-File',
-    version='1.0.0',
+    version='1.0.1',
     url='https://github.com/problemfighter/pf-py-file',
     license='Apache 2.0',
     author='Problem Fighter',
