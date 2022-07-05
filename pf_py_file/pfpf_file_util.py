@@ -32,7 +32,10 @@ class PFPFFileUtil:
     @staticmethod
     def delete(path):
         if PFPFFileUtil.is_exist(path):
-            shutil.rmtree(path, ignore_errors=True)
+            if os.path.isfile(path):
+                PFPFFileUtil.delete_file(path)
+            elif os.path.isdir(path):
+                shutil.rmtree(path, ignore_errors=True)
 
     @staticmethod
     def rename(source, destination):
