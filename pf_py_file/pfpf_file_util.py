@@ -1,5 +1,50 @@
 import os
 import shutil
+from pathlib import Path
+
+
+class FileUtil:
+
+    @staticmethod
+    def list_directory(path: str, is_file_only: bool = False, is_dir_only: bool = False, filter_extension: list = None):
+        if not FileUtil.is_exist(path):
+            return []
+
+        name_list = []
+        for name in os.listdir(path):
+            name_path = os.path.join(path, name)
+            if is_file_only and FileUtil.is_it_file(name_path):
+                if filter_extension:
+                    if FileUtil.get_file_extension(name) in filter_extension:
+                        name_list.append(name)
+                else:
+                    name_list.append(name)
+            elif is_dir_only and FileUtil.is_it_dir(name_path):
+                name_list.append(name)
+            else:
+                name_list.append(name)
+        return name_list
+
+    @staticmethod
+    def is_exist(path):
+        return os.path.exists(path)
+
+    @staticmethod
+    def is_it_file(path):
+        return os.path.isfile(path)
+
+    @staticmethod
+    def is_it_dir(path):
+        return os.path.isdir(path)
+
+    @staticmethod
+    def get_file_extension(filename):
+        if '.' in filename:
+            return filename.rsplit('.', 1)[1].lower()
+
+    @staticmethod
+    def filename_only(name_with_extension):
+        return Path(name_with_extension).stem
 
 
 class PFPFFileUtil:
@@ -27,7 +72,7 @@ class PFPFFileUtil:
 
     @staticmethod
     def is_exist(path):
-        return os.path.exists(path)
+        return FileUtil.is_exist(path)
 
     @staticmethod
     def delete(path):
