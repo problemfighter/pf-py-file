@@ -21,7 +21,7 @@ class FileUtil:
                     name_list.append(name)
             elif is_dir_only and FileUtil.is_it_dir(name_path):
                 name_list.append(name)
-            else:
+            elif not is_file_only and not is_dir_only:
                 name_list.append(name)
         return name_list
 
