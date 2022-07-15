@@ -6,12 +6,15 @@ from pathlib import Path
 class FileUtil:
 
     @staticmethod
-    def list_directory(path: str, is_file_only: bool = False, is_dir_only: bool = False, filter_extension: list = None):
+    def list_directory(path: str, is_file_only: bool = False, is_dir_only: bool = False, filter_extension: list = None, date_sort_desc: bool = True):
         if not FileUtil.is_exist(path):
             return []
 
         name_list = []
-        for name in os.listdir(path):
+        dir_list = os.listdir(path)
+        if date_sort_desc:
+            dir_list.sort(key=lambda name: os.path.getctime(os.path.join(path, name)), reverse=True)
+        for name in dir_list:
             name_path = os.path.join(path, name)
             if is_file_only and FileUtil.is_it_file(name_path):
                 if filter_extension:
