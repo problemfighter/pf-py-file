@@ -49,6 +49,17 @@ class FileUtil:
     def filename_only(name_with_extension):
         return Path(name_with_extension).stem
 
+    @staticmethod
+    def delete(path):
+        if FileUtil.is_exist(path):
+            if FileUtil.is_it_file(path):
+                os.remove(path)
+            elif FileUtil.is_it_dir(path):
+                shutil.rmtree(path, ignore_errors=True)
+            else:
+                return False
+        return True
+
 
 class PFPFFileUtil:
 
