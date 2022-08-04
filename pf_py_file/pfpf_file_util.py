@@ -60,6 +60,11 @@ class FileUtil:
                 return False
         return True
 
+    @staticmethod
+    def create_directories(path):
+        if not os.path.exists(path):
+            os.makedirs(path)
+
 
 class PFPFFileUtil:
 
