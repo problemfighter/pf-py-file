@@ -65,6 +65,13 @@ class FileUtil:
         if not os.path.exists(path):
             os.makedirs(path)
 
+    @staticmethod
+    def copy(source, destination, ignore=None):
+        if os.path.isdir(source):
+            return shutil.copytree(source, destination, ignore)
+        else:
+            return shutil.copy(source, destination)
+
 
 class PFPFFileUtil:
 
