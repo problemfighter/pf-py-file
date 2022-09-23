@@ -1,9 +1,75 @@
 import os
+import pathlib
 import shutil
 from pathlib import Path
 
 
+class FileInfo:
+    name: str = None
+    absolutePath: str = None
+    relativePath: str = None
+    type: str = None  # File, Dir
+    nested: list['FileInfo'] = []
+    created: float = None
+    modified: float = None
+
+
 class FileUtil:
+
+    @staticmethod
+    def list_directory_recursive(path: str, is_file_only: bool = False, is_dir_only: bool = False, filter_extension: list = None, date_sort_desc: bool = True, recursive: bool = True, _original_path: str = None) -> list['FileInfo']:
+        if not FileUtil.is_exist(path):
+            return []
+
+        if not _original_path:
+            _original_path = path
+
+        name_list = []
+        dir_list = os.listdir(path)
+        if date_sort_desc:
+            dir_list.sort(key=lambda name: os.path.getctime(os.path.join(path, name)), reverse=True)
+
+        for name in dir_list:
+            file_info = FileInfo()
+            file_info.absolutePath = os.path.join(path, name)
+            file_info.relativePath = path.replace(_original_path, "").strip(os.sep)
+            file_info.relativePath = file_info.relativePath.replace(os.sep, "/")
+            file_info.name = name
+
+            timetable = pathlib.Path(file_info.absolutePath).stat()
+            file_info.modified = timetable.st_mtime
+            file_info.created = timetable.st_ctime
+
+            is_it_file = FileUtil.is_it_file(file_info.absolutePath)
+            is_it_dir = FileUtil.is_it_dir(file_info.absolutePath)
+            if is_it_file:
+                file_info.type = "File"
+            elif is_it_dir:
+                file_info.type = "Dir"
+
+            if is_file_only and is_it_file:
+                if filter_extension:
+                    if FileUtil.get_file_extension(name) in filter_extension:
+                        name_list.append(file_info)
+                else:
+                    name_list.append(file_info)
+            elif is_dir_only and is_it_dir:
+                name_list.append(file_info)
+            elif not is_file_only and not is_dir_only:
+                name_list.append(file_info)
+
+            if recursive and is_it_dir:
+                file_info.nested = FileUtil.list_directory_recursive(
+                    path=file_info.absolutePath,
+                    is_file_only=is_file_only,
+                    is_dir_only=is_dir_only,
+                    filter_extension=filter_extension,
+                    date_sort_desc=date_sort_desc,
+                    recursive=recursive,
+                    _original_path=_original_path
+                )
+
+        return name_list
 
     @staticmethod
     def list_directory(path: str, is_file_only: bool = False, is_dir_only: bool = False, filter_extension: list = None, date_sort_desc: bool = True):
@@ -14,6 +80,7 @@ class FileUtil:
         dir_list = os.listdir(path)
         if date_sort_desc:
             dir_list.sort(key=lambda name: os.path.getctime(os.path.join(path, name)), reverse=True)
+
         for name in dir_list:
             name_path = os.path.join(path, name)
             if is_file_only and FileUtil.is_it_file(name_path):
@@ -26,7 +93,9 @@ class FileUtil:
                 name_list.append(name)
             elif not is_file_only and not is_dir_only:
                 name_list.append(name)
+
         return name_list
+
 
     @staticmethod
     def is_exist(path):
